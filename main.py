@@ -21,31 +21,8 @@ def prepare_data():
     df_test = pd.read_csv('./data/IMDB_test.csv')
     return df_train, df_test
 
-def get_argument():
-    # do not modify
-    config = {
-        'model_type': "BERT",
-        'part': 2,
-        'preprocess': 1,
-    }
-    return config
-
-def first_part(model_type, df_train, df_test, N):
-    # load and train model
-    if model_type == 'ngram':
-        model = Ngram(N)
-        model.train(df_train)
-    else:
-        raise NotImplementedError
-
-    # test performance of model
-    perplexity = model.compute_perplexity(df_test)
-    print("Perplexity of {}: {}".format(model_type, perplexity))
-
-    return model
 
 def second_part(model_type, df_train, df_test, N):
-
     # training configure
     bert_config = {
         'batch_size': 8,
@@ -53,9 +30,7 @@ def second_part(model_type, df_train, df_test, N):
         'lr': 2e-5,
         'device': torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
     }
-    
 
-    
     # load and dataset and set model
     model = BERT('distilbert-base-uncased', config = bert_config)
 
@@ -136,8 +111,7 @@ def train(model_type, model, train_dataloader, test_dataloader, optimizer, loss_
     
 if  __name__ == '__main__':
     # get argument
-    config = get_argument()
-    model_type, preprocessed = config['model_type'], config['preprocess']
+    model_type = 'BERT'
     N = 2 # we only use bi-gram in this assignment, but you can try different N
 
     # read and prepare data
@@ -147,14 +121,7 @@ if  __name__ == '__main__':
     df_test['sentiment'] = df_test['sentiment'].map(label_mapping)
 
     # feel free to add more text preprocessing method
-    if preprocessed:
-        df_train['review'] = df_train['review'].apply(preprocessing_function)
-        df_test['review'] = df_test['review'].apply(preprocessing_function)
+    df_train['review'] = df_train['review'].apply(preprocessing_function)
+    df_test['review'] = df_test['review'].apply(preprocessing_function)
 
-    if config['part'] == 1:
-        # part 1: implement bi-gram model
-        first_part(model_type, df_train, df_test, N)
-    elif config['part'] == 2:
-        # part 2: implement your nn model from scratch
-        # part 3: implement your nn model from other pre-trained model
-        second_part(model_type, df_train, df_test, N)
+    second_part(model_type, df_train, df_test, N)
