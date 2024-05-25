@@ -9,14 +9,14 @@ class BERTDataset(Dataset):
         super().__init__()
         self.data = {}
         for idx, row in df.iterrows():
-            self.data[idx] = (row['review'], row['sentiment'])
+            self.data[idx] = (row['title'], row['real'])
 
     def __len__(self):
         return len(self.data)
 
     def __getitem__(self, idx):
-        review, sentiment = self.data[idx]
-        return review, torch.tensor(sentiment)
+        title, real = self.data[idx]
+        return title, torch.tensor(real)
 
 
 class BERT_IMDB(nn.Module):

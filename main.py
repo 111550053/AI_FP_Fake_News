@@ -12,13 +12,19 @@ from torch.utils.data import DataLoader
 from bert import BERT, BERTDataset
 from preprocess import preprocessing_function
 
+import numpy as np
+
 warnings.filterwarnings("ignore")
 
 
 def prepare_data():
     # do not modify
-    df_train = pd.read_csv('./data/IMDB_train.csv')
-    df_test = pd.read_csv('./data/IMDB_test.csv')
+    k = 100
+    df_test = pd.read_csv('./data/train.csv', nrows = k)
+    print(type(df_test))
+    print()
+    df_train = pd.read_csv('./data/train.csv', skiprows = list(range(1, k + 1)))
+    print(df_train)
     return df_train, df_test
 
 
@@ -26,7 +32,7 @@ def second_part(model_type, df_train, df_test, N):
     # training configure
     bert_config = {
         'batch_size': 8,
-        'epochs': 1,
+        'epochs': 4,
         'lr': 2e-5,
         'device': torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
     }
@@ -116,12 +122,9 @@ if  __name__ == '__main__':
 
     # read and prepare data
     df_train, df_test = prepare_data()
-    label_mapping = {'negative': 0, 'positive': 1}
-    df_train['sentiment'] = df_train['sentiment'].map(label_mapping)
-    df_test['sentiment'] = df_test['sentiment'].map(label_mapping)
 
     # feel free to add more text preprocessing method
-    df_train['review'] = df_train['review'].apply(preprocessing_function)
-    df_test['review'] = df_test['review'].apply(preprocessing_function)
+    df_train['title'] = df_train['title'].apply(preprocessing_function)
+    df_test['title'] = df_test['title'].apply(preprocessing_function)
 
     second_part(model_type, df_train, df_test, N)
