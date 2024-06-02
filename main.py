@@ -112,7 +112,7 @@ def train(model_type, model, train_dataloader, test_dataloader, optimizer, loss_
         # if pf-f1 > 0.01 :
         #     break
         # pf = f1
-        torch.save(model,'project.pt')
+        torch.save(model,'project_2.pt')
     
     # END YOUR CODE
     
