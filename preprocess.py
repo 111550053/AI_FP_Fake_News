@@ -24,13 +24,10 @@ def remove_stopwords(text: str) -> str:
     return preprocessed_text
 
 def preprocessing_function(text: str) -> str:
-    lastly = ["sunday", "moday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
     preprocessed_text = remove_stopwords(text)
     preprocessed_text = preprocessed_text.lower()
     preprocessed_text = re.sub(r'[^a-z\s]', '', preprocessed_text)
     word_tokens = preprocessed_text.split()
     stems = [stemmer.stem(word) for word in word_tokens]
     preprocessed_text = ' '.join(stems)
-    for x in range(len(lastly)):
-        preprocessed_text = preprocessed_text.replace(lastly[x], "")
     return preprocessed_text
