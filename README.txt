@@ -11,4 +11,7 @@ python3 testwithmodel.py
 
 to use LIME to explain the model
 put the folders "model" and "data" to google drive
-run lime.ipynb
+run blackbox.ipynb
+find the last blcok of blackbox("...") and put the article between ""
+note that the " in the article should be modified to \"
+then run the block
